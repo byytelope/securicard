@@ -21,7 +21,10 @@ def main() -> None:
     )
     print("Thank you for using SecuriCard™")
 
-    action = inquirer.select(
+    usr_action = inquirer.text(message="Company username:").execute()
+    pwd_action = inquirer.secret(message="Password for user:").execute()
+
+    menu_action = inquirer.select(
         message="Select an action:",
         choices=[
             Choice(value=0, name="Start server"),
@@ -31,7 +34,7 @@ def main() -> None:
         default=None,
     ).execute()
 
-    match action:
+    match menu_action:
         case 0:
             start_server()
         case 1:
@@ -47,7 +50,7 @@ def start_server() -> None:
         log_type: str = choices(log_types, weights=(90, 10))[0]
         log_msg = "Sample server log."
         if log_type == "FRD":
-            log_msg = "Potential fraud detected. Bank has been alerted successfully."
+            log_msg = "Potential fraud detected and alerted."
 
         log_line = f'{time.strftime("%m/%d/%Y %H:%M:%S")} {log_type}: {log_msg}'
         print(log_line)

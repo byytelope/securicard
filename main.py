@@ -1,3 +1,4 @@
+from os import system
 from datetime import datetime
 from time import sleep
 from random import choices
@@ -7,6 +8,7 @@ from InquirerPy.base.control import Choice
 
 
 def main() -> None:
+    system("clear")
     print(
         r"""
   _____                      _  _____              _
@@ -41,9 +43,13 @@ def main() -> None:
 def start_server() -> None:
     while True:
         time = datetime.now()
-        log_types = ["WRN", "ERR", "INF"]
-        log_type: str = choices(log_types, weights=(25, 10, 65))[0]
-        log_line = f'{time.strftime("%m/%d/%Y %H:%M:%S")} {log_type}: '
+        log_types = ["LOG", "FRD"]
+        log_type: str = choices(log_types, weights=(90, 10))[0]
+        log_msg = "Sample server log."
+        if log_type == "FRD":
+            log_msg = "Potential fraud detected. Bank has been alerted successfully."
+
+        log_line = f'{time.strftime("%m/%d/%Y %H:%M:%S")} {log_type}: {log_msg}'
         print(log_line)
         sleep(1)
 

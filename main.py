@@ -1,3 +1,7 @@
+from datetime import datetime
+from time import sleep
+from random import choices
+
 from InquirerPy import inquirer
 from InquirerPy.base.control import Choice
 
@@ -35,13 +39,38 @@ def main() -> None:
 
 
 def start_server() -> None:
-    # TODO: Implement start
-    print("Started")
+    while True:
+        time = datetime.now()
+        log_types = ["WRN", "ERR", "INF"]
+        log_type: str = choices(log_types, weights=(25, 10, 65))[0]
+        log_line = f'{time.strftime("%m/%d/%Y %H:%M:%S")} {log_type}: '
+        print(log_line)
+        sleep(1)
 
 
 def configure() -> None:
-    # TODO: Implement config
-    print("Config")
+    config_action = inquirer.select(
+        message="Select config option:",
+        choices=[
+            Choice(value=0, name="Set notification endpoint"),
+            Choice(value=1, name="Set bank db endpoint"),
+            Choice(value=2, name="Detect db schema"),
+            Choice(value=3, name="Delete audit logs"),
+        ],
+        default=None,
+    ).execute()
+
+    match config_action:
+        case 0:
+            print("Notification endpoint set")
+        case 1:
+            print("Bank db endpoint set")
+        case 2:
+            print("Db schema set")
+        case 3:
+            print("Audit logs deleted")
+        case _:
+            exit()
 
 
 if __name__ == "__main__":

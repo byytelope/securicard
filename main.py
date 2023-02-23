@@ -44,6 +44,8 @@ def main() -> None:
 
 
 def start_server() -> None:
+    show_init = 0
+
     while True:
         time = datetime.now()
         log_types = ["LOG", "FRD"]
@@ -52,8 +54,12 @@ def start_server() -> None:
         if log_type == "FRD":
             log_msg = "Potential fraud detected and alerted."
 
+        if show_init == 0:
+            log_msg = "Starting SecuriCard™ server..."
+
         log_line = f'{time.strftime("%m/%d/%Y %H:%M:%S")} {log_type}: {log_msg}'
         print(log_line)
+        show_init = 1
         sleep(1)
 
 

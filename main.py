@@ -21,8 +21,8 @@ def main() -> None:
     )
     print("Thank you for using SecuriCard™")
 
-    usr_action = inquirer.text(message="Company username:").execute()
-    pwd_action = inquirer.secret(message="Password for user:").execute()
+    inquirer.text(message="Company username:").execute()
+    inquirer.secret(message="Password for user:").execute()
 
     menu_action = inquirer.select(
         message="Select an action:",
@@ -63,21 +63,57 @@ def configure() -> None:
         choices=[
             Choice(value=0, name="Set notification endpoint"),
             Choice(value=1, name="Set bank db endpoint"),
-            Choice(value=2, name="Detect db schema"),
-            Choice(value=3, name="Delete audit logs"),
+            Choice(value=2, name="Manage audit logs"),
         ],
         default=None,
     ).execute()
 
     match config_action:
         case 0:
-            print("Notification endpoint set")
+            set_notif_endpoint()
         case 1:
-            print("Bank db endpoint set")
+            set_bank_db_endpoint()
         case 2:
-            print("Db schema set")
+            manage_audit_logs()
+        case _:
+            exit()
+
+
+def set_notif_endpoint() -> None:
+    endpoint_action = inquirer.text(
+        message="Enter endpoint for notification system:"
+    ).execute()
+
+    print(f"Notification endpoint set to: {endpoint_action}")
+
+
+def set_bank_db_endpoint() -> None:
+    endpoint_action = inquirer.text(message="Enter endpoint for bank db:").execute()
+
+    print(f"Bank db endpoint set to: {endpoint_action}")
+    print(f"Bank db schema detected and validated")
+
+
+def manage_audit_logs() -> None:
+    endpoint_action = inquirer.select(
+        message="Select audit log action",
+        choices=[
+            Choice(value=0, name="Clear logs"),
+            Choice(value=1, name="Re-scan logs"),
+            Choice(value=2, name="Mark for review"),
+            Choice(value=3, name="Delete logs"),
+        ],
+    ).execute()
+
+    match endpoint_action:
+        case 0:
+            print("Logs cleared")
+        case 1:
+            print("Logs re-scanned")
+        case 2:
+            print("Admin called for log review")
         case 3:
-            print("Audit logs deleted")
+            print("Logs deleted")
         case _:
             exit()
 
